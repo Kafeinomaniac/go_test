@@ -30,6 +30,9 @@ func main() {
 	if i1.overlaps(i3) {
 		fmt.Println("i1 et i3 se chevauchent")
 	}
+
+	i1.union(i2)
+	fmt.Println(i1)
 }
 
 func tick(c chan string) {
@@ -92,4 +95,14 @@ func (d *dateTimeInterval) overlaps(interval *dateTimeInterval) bool {
 		return false
 	}
 	return interval.end.Nanosecond() >= d.start.Nanosecond()
+}
+
+func (d *dateTimeInterval) union(interval *dateTimeInterval) {
+	if interval.start.Nanosecond() < d.start.Nanosecond() {
+		d.start = interval.start
+	}
+	if interval.end.Nanosecond() > d.end.Nanosecond() {
+		d.end = interval.end
+	}
+	d.duration = d.end.Sub(d.start)
 }
